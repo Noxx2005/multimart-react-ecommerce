@@ -8,9 +8,6 @@ import { addToCart } from "../../app/features/cart/cartSlice";
 const ProductCard = ({ title, productItem }) => {
   const dispatch = useDispatch();
   const router = useNavigate();
-  const handelClick = () => {
-    router(`/shop/${productItem.id}`);
-  };
   const handelAdd = (productItem) => {
     dispatch(addToCart({ product: productItem, num: 1 }));
     toast.success("Product has been added to cart!");
@@ -22,7 +19,6 @@ const ProductCard = ({ title, productItem }) => {
       ) : null}
       <img
         loading="lazy"
-        onClick={() => handelClick()}
         src={productItem.imgUrl}
         alt=""
       />
@@ -30,7 +26,7 @@ const ProductCard = ({ title, productItem }) => {
         <ion-icon name="heart-outline"></ion-icon>
       </div>
       <div className="product-details">
-        <h3 onClick={() => handelClick()}>{productItem.productName}</h3>
+        <h3>{productItem.productName}</h3>
         <div className="rate">
           <i className="fa fa-star"></i>
           <i className="fa fa-star"></i>

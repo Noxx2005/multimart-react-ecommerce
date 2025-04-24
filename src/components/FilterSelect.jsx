@@ -1,13 +1,6 @@
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { products } from '../utils/products';
-
-const options = [
-    { value: "sofa", label: "Sofa" },
-    { value: "chair", label: "Chair" },
-    { value: "watch", label: "Watch" },
-    { value: "mobile", label: "Mobile" },
-    { value: "wireless", label: "Wireless" },
-];
 
 const customStyles = {
     control: (provided) => ({
@@ -25,8 +18,8 @@ const customStyles = {
         backgroundColor: state.isSelected ? "#0f3460" : "white",
         color: state.isSelected ? "white" : "#0f3460",
         "&:hover": {
-        backgroundColor: "#0f3460",
-        color: "white",
+            backgroundColor: "#0f3460",
+            color: "white",
         },
     }),
     singleValue: (provided) => ({
@@ -35,17 +28,38 @@ const customStyles = {
     }),
 };
 
-const FilterSelect = ({setFilterList}) => {
-    const handleChange = (selectedOption)=> {
-        setFilterList(products.filter(item => item.category ===selectedOption.value))
-    }
+const FilterSelect = ({ setFilterList }) => {
+    const [categoryOptions, setCategoryOptions] = useState([]);
+
+    useEffect(() => {
+        // Wait until products are loaded
+        const interval = setInterval(() => {
+            if (products.length > 0) {
+                const categories = [...new Set(products.map(p => p.category))];
+                const options = categories.map(category => ({
+                    value: category,
+                    label: category.charAt(0).toUpperCase() + category.slice(1),
+                }));
+                setCategoryOptions(options);
+                clearInterval(interval); // Stop checking once data is loaded
+            }
+        }, 100); // Poll every 100ms
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const handleChange = (selectedOption) => {
+        setFilterList(products.filter(item => item.category === selectedOption.value));
+    };
+
     return (
-    <Select
-    options={options}
-    defaultValue={{ value: "", label: "Filter By Category" }}
-    styles={customStyles}
-    onChange={handleChange}
-    />
+        <Select
+            options={categoryOptions}
+            placeholder="Filter By Category"
+            styles={customStyles}
+            onChange={handleChange}
+            isDisabled={categoryOptions.length === 0}
+        />
     );
 };
 

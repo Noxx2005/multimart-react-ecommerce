@@ -1,0 +1,130 @@
+.vendor-profile {
+    width: 100%;
+    padding: 20px;
+    background-color: #fff;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    min-height:100vh;
+  }
+  
+  .profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 1px solid #4169e1;
+    margin: 0 auto;
+  }
+  
+  .shop-name {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .shop-desc {
+    text-align: center;
+    color: gray;
+    margin-bottom: 20px;
+  }
+  
+  .info-section {
+    font-size: 14px;
+    margin-bottom: 150px;
+    color: #333;
+  }
+  
+  .info-section p {
+    margin-bottom: 15px;
+  }
+  
+  .edit-btn,
+  .logout-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .edit-btn {
+    background-color: black;
+    color: white;
+  }
+  
+  .logout-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal {
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .modal h3 {
+    margin-bottom: 15px;
+  }
+  
+  .modal input[type="text"],
+  .modal input[type="number"],
+  .modal input[type="url"] {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+  }
+  
+  .modal label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  .modal-buttons button {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .modal-buttons button[type="submit"] {
+    background-color: #000;
+    color: white;
+  }
+  
+  .modal-buttons button[type="button"] {
+    background-color: #dc3545;
+    color: white;
+  }
+  
