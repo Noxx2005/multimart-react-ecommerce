@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./addproductmodal.css";
 
 const AddProductModal = ({ onClose, onSuccess }) => {
@@ -8,7 +10,7 @@ const AddProductModal = ({ onClose, onSuccess }) => {
     stock: 0,
     isAvailable: true,
     productTypeId: 0,
-    imageUrl: ""
+    imageBase64: ""
   });
 
   const [productTypes, setProductTypes] = useState([]);
@@ -40,22 +42,39 @@ const AddProductModal = ({ onClose, onSuccess }) => {
     });
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64String = reader.result.split(',')[1];
+      setForm((prev) => ({
+        ...prev,
+        imageBase64: base64String,
+      }));
+    };
+
+    if (file) reader.readAsDataURL(file);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5081/api/Product/vendor/add", {
+      const response = await fetch("http://localhost:5081/api/Product/vendor/add?vendorId=1", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
       if (response.ok) {
+        toast.success("Product added successfully!");
         onSuccess();
         onClose();
       } else {
-        console.error("Failed to add product");
+        toast.error("Failed to add product. Please try again.");
       }
     } catch (error) {
+      toast.error("An error occurred while submitting the product.");
       console.error("Error submitting product:", error);
     }
   };
@@ -67,17 +86,19 @@ const AddProductModal = ({ onClose, onSuccess }) => {
       const res = await fetch("http://localhost:5081/api/Product/AddType", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newTypeName), // ✅ just the string
-      });      
+        body: JSON.stringify(newTypeName),
+      });
 
       if (res.ok) {
         setNewTypeName("");
         setShowTypePopup(false);
         fetchProductTypes();
+        toast.success("New product type added!");
       } else {
-        console.error("Failed to add new product type");
+        toast.error("Failed to add new product type.");
       }
     } catch (err) {
+      toast.error("Error adding product type.");
       console.error("Error adding type:", err);
     }
   };
@@ -90,7 +111,13 @@ const AddProductModal = ({ onClose, onSuccess }) => {
           <input name="name" placeholder="Name" onChange={handleChange} required />
           <input name="price" type="number" placeholder="Price" onChange={handleChange} required />
           <input name="stock" type="number" placeholder="Stock" onChange={handleChange} required />
-          <input name="imageUrl" placeholder="Image URL" onChange={handleChange} required />
+          
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            required
+          />
 
           <select
             name="productTypeId"
@@ -122,7 +149,6 @@ const AddProductModal = ({ onClose, onSuccess }) => {
         </form>
       </div>
 
-      {/* Mini popup for adding type */}
       {showTypePopup && (
         <div className="type-popup">
           <div className="type-popup-content">

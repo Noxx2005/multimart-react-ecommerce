@@ -3,10 +3,23 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import "./navbar.css";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+
 const NavBar = () => {
   const { cartList } = useSelector((state) => state.cart);
   const [expand, setExpand] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
+  const [isVendor, setIsVendor] = useState(false);
+
+  // Check vendor status in sessionStorage
+  useEffect(() => {
+    const vendorStatus = sessionStorage.getItem("isVendor");
+    if (vendorStatus === "true") {
+      setIsVendor(true);
+    } else {
+      setIsVendor(false);
+    }
+  }, []);
+
   // fixed Header
   function scrollHandler() {
     if (window.scrollY >= 100) {
@@ -16,18 +29,9 @@ const NavBar = () => {
     }
   }
   window.addEventListener("scroll", scrollHandler);
-  // useEffect(()=> {
-  //   if(CartItem.length ===0) {
-  //     const storedCart = localStorage.getItem("cartItem");
-  //     setCartItem(JSON.parse(storedCart));
-  //   }
-  // },[])
+
   return (
-    <Navbar
-      fixed="top"
-      expand="md"
-      className={isFixed ? "navbar fixed" : "navbar"}
-    >
+    <Navbar fixed="top" expand="md" className={isFixed ? "navbar fixed" : "navbar"}>
       <Container className="navbar-container">
         <Navbar.Brand to="/">
           <ion-icon name="bag"></ion-icon>
@@ -109,6 +113,30 @@ const NavBar = () => {
                 <span className="nav-link-label">Cart</span>
               </Link>
             </Nav.Item>
+
+            {/* Conditionally render Become A Seller or Go to Seller Dashboard */}
+            <Nav.Item>
+              {isVendor ? (
+                <Link
+                  aria-label="Go to Seller Dashboard"
+                  className="navbar-link"
+                  to="/vendor"
+                  onClick={() => setExpand(false)}
+                >
+                  <span className="nav-link-label">Go to Seller Dashboard</span>
+                </Link>
+              ) : (
+                <Link
+                  aria-label="Become A Seller"
+                  className="navbar-link"
+                  to="/become-a-seller"
+                  onClick={() => setExpand(false)}
+                >
+                  <span className="nav-link-label">Become A Seller</span>
+                </Link>
+              )}
+            </Nav.Item>
+
             <Nav.Item className="expanded-cart">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

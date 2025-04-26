@@ -27,26 +27,28 @@ const AuthPage = () => {
     window.register = register;
   }, []);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:5081/api/Auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginForm),
-      });
+// LoginSignUp.js
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch("http://localhost:5081/api/Auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(loginForm),
+    });
 
-      if (!response.ok) throw new Error('Login failed');
+    if (!response.ok) throw new Error("Login failed");
 
-      const data = await response.json();
-      sessionStorage.setItem('token', data.token.token);
-      sessionStorage.setItem('email', data.token.email);
-      sessionStorage.setItem('isVendor', data.token.isVendor);
-      navigate('/');
-    } catch (err) {
-      alert(err.message);
-    }
-  };
+    const data = await response.json();
+    sessionStorage.setItem("token", data.token.token); // Save the token
+    sessionStorage.setItem("email", data.token.email); // Save email if needed
+    sessionStorage.setItem("isVendor", data.token.isVendor); // Save vendor status if needed
+    navigate("/"); // Navigate to home page after successful login
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
 
   const handleRegister = async (e) => {
     e.preventDefault();
